@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daily Grind</title>
+    <style>
+        /* ═══════════════════════════════════════════════════════════════
+         1. GLOBAL STYLES
+         Sets sane defaults that every element inherits or respects.
+      ═══════════════════════════════════════════════════════════════ */
+
+        /*
+        WHY border-box globally: By default, padding and border ADD to an
+        element's declared width, which makes mental maths painful. Setting
+        border-box means "width: 300px" always means 300px on screen —
+        padding and border eat into that space instead of expanding it.
+      */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Georgia, "Times New Roman", serif;
+            line-height: 1.7;
+            color: #2c1a0e;
+            /* warm dark brown instead of harsh black */
+            background: #fdf6ee;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+        }
+
+
+        /* ═══════════════════════════════════════════════════════════════
+         2. TYPOGRAPHY
+         Centralising font choices keeps the brand voice consistent.
+      ═══════════════════════════════════════════════════════════════ */
+
+        h1,
+        h2,
+        h3 {
+            font-family: "Palatino Linotype", Palatino, serif;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+            color: #6b3a2a;
+        }
+
+        p {
+            margin-bottom: 0.8rem;
+            color: #4a3728;
+        }
+
+
+        /* ═══════════════════════════════════════════════════════════════
+         3. LAYOUT
+         Page-level containers and spacing rhythm.
+      ═══════════════════════════════════════════════════════════════ */
+
+        .container {
+            max-width: 1100px;
+            /*
+          WHY margin: 0 auto: "auto" tells the browser to share whatever
+          horizontal space remains equally between both sides, which centres
+          the block. This only works on block elements with a declared width
+          (or max-width). Without an explicit width, there is no leftover
+          space to distribute.
+        */
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        section {
+            padding: 5rem 0;
+        }
+
+
+        /* ═══════════════════════════════════════════════════════════════
+         4. COMPONENTS
+         Reusable UI elements: buttons, cards, nav links.
+      ═══════════════════════════════════════════════════════════════ */
+
+        /* ── Call-to-action button ── */
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            background: #c0392b;
+            color: #fff;
+            text-decoration: none;
+            /*
+          WHY border-radius here: Slightly rounded corners feel friendlier
+          and more inviting — important for a hospitality brand. Fully sharp
+          corners read as "corporate" and cold, which conflicts with the
+          warm coffee-shop tone.
+        */
+            border-radius: 30px;
+            /* pill shape */
+            font-size: 1rem;
+            font-family: inherit;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .btn:hover {
+            background: #a93226;
+        }
+
+        .btn:active {
+            transform: translateY(2px);
+        }
+
+        /* ── Menu card ── */
+        .menu-card {
+            display: inline-block;
+            vertical-align: top;
+            width: calc(33.333% - 1.4rem);
+            /* three cards per row with gutters */
+            margin-right: 2rem;
+            background: #fff;
+            border: 1px solid #e8d9c8;
+            border-radius: 12px;
+            /* rounded corners — 2nd border-radius use */
+            padding: 1.5rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+        }
+
+        /* Remove the right margin from the last card so it doesn't overflow */
+        .menu-card:last-child {
+            margin-right: 0;
+        }
+
+        .menu-card .price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #c0392b;
+            margin-top: 0.5rem;
+            margin-bottom: 0;
+        }
+
+        .menu-card .emoji {
+            font-size: 2.5rem;
+            margin-bottom: 0.6rem;
+            display: block;
+        }
+
+        /* ── Nav links ── */
+        .site-nav a {
+            color: #fdf6ee;
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-size: 0.95rem;
+            letter-spacing: 0.03em;
+            transition: color 0.2s;
+        }
+
+        .site-nav a:hover {
+            color: #f0c080;
+        }
+
+
+        /* ═══════════════════════════════════════════════════════════════
+         5. PAGE-SPECIFIC STYLES
+         Styles that apply only to a particular region of this page.
+      ═══════════════════════════════════════════════════════════════ */
+
+        /* ── Header / sticky nav ── */
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            /*
+          WHY a dark, slightly opaque background for a sticky header:
+          As the page scrolls, content slides underneath the header. Without
+          a solid (or near-solid) background, text from sections below bleeds
+          through and becomes illegible — the header must always be readable.
+        */
+            background: rgba(30, 15, 5, 0.95);
+            backdrop-filter: blur(6px);
+            /* subtle glassmorphism */
+            padding: 1rem 0;
+        }
+
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .logo {
+            font-family: "Palatino Linotype", Palatino, serif;
+            font-size: 1.5rem;
+            color: #f0c080;
+            letter-spacing: 0.05em;
+        }
+
+        /* ── Hero section ── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+
+            /*
+          background shorthand: <image-list> <position> / <size> <repeat> <attachment>
+          Two-layer background:
+            Layer 1 (top):    semi-transparent dark gradient = overlay
+            Layer 2 (bottom): the photo from picsum
+        */
+            background:
+                linear-gradient(rgba(0, 0, 0, 0.52), rgba(0, 0, 0, 0.52)),
+                url("https://picsum.photos/seed/dailygrind/1800/1000") center / cover no-repeat;
+        }
+
+        .hero-content {
+            padding: 2rem;
+            max-width: 720px;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(2.5rem, 7vw, 5rem);
+            margin-bottom: 1rem;
+            text-shadow: 0 3px 12px rgba(0, 0, 0, 0.5);
+            color: #f0c080;
+        }
+
+        .hero-content p {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+        }
+
+        /* ── Menu section ── */
+        .menu-section {
+            background: #fdf6ee;
+        }
+
+        .menu-section h2 {
+            text-align: center;
+            margin-bottom: 0.3rem;
+        }
+
+        .menu-section .section-sub {
+            text-align: center;
+            color: #7a5c48;
+            margin-bottom: 3rem;
+        }
+
+        .menu-grid {
+            /* white-space: nowrap prevents inline-block cards from wrapping
+           when the viewport is wide enough; we undo it inside the cards */
+            font-size: 0;
+            /* collapses whitespace gaps between inline-block cards */
+        }
+
+        .menu-card {
+            font-size: 1rem;
+            /* restore after font-size:0 on parent */
+        }
+
+        /* ── Footer ── */
+        .site-footer {
+            background: #1e0f05;
+            color: #b09080;
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .site-footer .logo {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .site-footer p {
+            color: #78584a;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .site-footer a {
+            color: #b09080;
+            text-decoration: underline;
+        }
+
+
+        /* ═══════════════════════════════════════════════════════════════
+         6. UTILITIES
+         Single-purpose helper classes used across the page.
+      ═══════════════════════════════════════════════════════════════ */
+
+        /*
+        WHY visually-hidden instead of display:none: display:none removes the
+        element from the accessibility tree, making it invisible to screen
+        readers. This class hides it visually while keeping it accessible —
+        useful for things like "Skip to content" links or icon labels.
+      */
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-1 {
+            margin-top: 1rem;
+        }
+
+        .mt-2 {
+            margin-top: 2rem;
+        }
+    </style>
+  </head>
+  <body>
+    <!-- Sticky header -->
+    <header class="site-header">
+      <div class="header-inner">
+            <span class="logo">☕ The Daily Grind</span>
+            <nav class="site-nav" aria-label="Main navigation">
+                <a href="#hero">Home</a>
+                <a href="#menu">Menu</a>
+                <a href="#footer">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+
+    <!-- Hero Section -->
+    <main>
+      <section class="hero" id="hero" aria-label="Hero banner">
+            <div class="hero-content">
+                <h1>Wake Up &amp; Smell the Coffee</h1>
+                <p>Freshly roasted, carefully brewed, served with love every morning since 2012.</p>
+                <a href="#menu" class="btn">See Our Menu</a>
+            </div>
+        </section>
+
+      
+    <!-- Menu Section - 3 cards with inline-block -->
+       <section class="menu-section" id="menu" aria-labelledby="menu-heading">
+            <div class="container">
+                <h2 id="menu-heading">Our Favourites</h2>
+                <p class="section-sub">Simple menu, exceptional quality.</p>
+
+                <div class="menu-grid">
+
+                    <article class="menu-card">
+                        <span class="emoji" aria-hidden="true">☕</span>
+                        <h3>Flat White</h3>
+                        <p>Double ristretto with velvety micro-foam steamed milk. Our best seller.
+                        </p>
+                        <p class="price">€3.50</p>
+                    </article>
+
+                    <article class="menu-card">
+                        <span class="emoji" aria-hidden="true">🧁</span>
+                        <h3>Cardamom Muffin</h3>
+                        <p>Baked fresh each morning with whole spices and a brown-sugar crumble top.
+                        </p>
+                        <p class="price">€2.80</p>
+                    </article>
+
+                    <article class="menu-card">
+                        <span class="emoji" aria-hidden="true">🍵</span>
+                        <h3>Matcha Latte</h3>
+                        <p>Ceremonial-grade matcha whisked smooth, topped with oat-milk foam.</p>
+                        <p class="price">€4.20</p>
+                    </article>
+
+                </div>
+                <!-- /.menu-grid -->
+            </div>
+            <!-- /.container -->
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer" id="footer">
+        <div class="logo">☕ The Daily Grind</div>
+        <p>12 Beanery Lane, Dublin 2 &nbsp;|&nbsp; <a href="tel:+35312345678">+353 1 234 5678</a>
+        </p>
+        <p>Open Mon–Fri 7 am–6 pm &nbsp;·&nbsp; Sat–Sun 8 am–5 pm</p>
+        <p class="mt-1">© 2026 The Daily Grind. All rights reserved.</p>
+     </footer>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
